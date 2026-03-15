@@ -1,0 +1,71 @@
+---
+import Galaxy from "@/components/GalaxyBg";
+import TailwindIndicator from "@/components/tailwind-indicator.astro";
+
+import { cn } from "@/lib/utils";
+import "@/styles/globals.css"
+
+type Props = {
+  title: string;
+  description?: string;
+  mainClass?: string;
+};
+
+const { title, description, mainClass } = Astro.props;
+---
+
+<html lang="en" class="scroll-smooth">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body class="min-h-screen bg-background text-foreground relative overflow-x-hidden">
+		<TailwindIndicator />
+		<!-- Full-viewport fixed background: 100% width/height, responsive, GPU-friendly -->
+		<div class="galaxy-bg fixed inset-0 w-full h-full min-h-screen min-h-[100dvh] -z-[1] will-change-transform">
+			<Galaxy
+				mouseRepulsion
+				mouseInteraction
+				density={1}
+				glowIntensity={0.3}
+				saturation={0}
+				hueShift={140}
+				twinkleIntensity={0.3}
+				rotationSpeed={0.1}
+				repulsionStrength={2}
+				autoCenterRepulsion={0}
+				starSpeed={0.5}
+				speed={1}
+				client:visible
+			/>
+		</div>
+		<div class="relative z-10">
+            <main class={cn(mainClass)}>
+                <slot />
+            </main>
+		</div>
+	</body>
+</html>
+
+<script is:inline>
+	const getThemePreference = () => {
+		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+			return localStorage.getItem('theme');
+		}
+		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+	};
+	const isDark = getThemePreference() === 'dark';
+	document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+ 
+	if (typeof localStorage !== 'undefined') {
+		const observer = new MutationObserver(() => {
+			const isDark = document.documentElement.classList.contains('dark');
+			localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		});
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+	}
+</script>
