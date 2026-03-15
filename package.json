@@ -1,0 +1,48 @@
+{
+	"name": "wb-website",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"editorconfig": "editorconfig-checker -exclude \"**/node_modules/**\"",
+		"browserslist": "bunx update-browserslist-db@latest",
+		"start": "bun wrangler types && bun astro check --verbose && bun astro dev --verbose",
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro build && wrangler dev",
+		"astro": "astro",
+		"generate-types": "wrangler types",
+		"deploy": "astro build && wrangler deploy",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.9.7",
+		"@astrojs/cloudflare": "^13.1.1",
+		"@astrojs/mdx": "^5.0.0",
+		"@astrojs/react": "^5.0.0",
+		"@astrojs/sitemap": "^3.7.1",
+		"@radix-ui/react-label": "^2.1.7",
+		"@radix-ui/react-select": "^2.2.6",
+		"@radix-ui/react-slot": "^1.2.3",
+		"astro": "^6.0.4",
+		"bun-plugin-tailwind": "^0.1.2",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.545.0",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"tailwind-merge": "^3.3.1",
+		"typescript": "^5.9.3"
+	},
+	"devDependencies": {
+		"@types/node": "^25.5.0",
+		"wrangler": "^4.73.0",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@types/bun": "latest",
+		"tailwindcss": "^4.1.11",
+		"tw-animate-css": "^1.4.0"
+	}
+}
