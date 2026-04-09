@@ -4,16 +4,12 @@ import Hero from "@/components/hero";
 import Layout from "@/layouts/Layout.astro";
 import Pricing from "@/components/pricing";
 import { Stat1 } from "@/components/stats";
-import CtaSection  from "@/components/cta";
-import Container from "@/components/layouts/container.astro";
+
 ---
 
 <Layout title="Homepage">
-	<Container>
 	<Hero client:visible />
 	<Features client:visible />
 	<Pricing client:visible />
 	<Stat1 client:visible />
-	<CtaSection client:visible />
-	</Container>
 </Layout>
