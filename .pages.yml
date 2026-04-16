@@ -39,7 +39,7 @@ content:
         required: true 
       - name: ogImage
         label: Title
-        type: string
+        type: image
       - name: slug
         label: Slug 
         type: string
@@ -61,6 +61,7 @@ content:
         type: rich-text
         options:
           media: images
+          type: image
           rename: true
           switcher: true
           
