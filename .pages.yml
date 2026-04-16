@@ -30,6 +30,8 @@ content:
         options:
           media: images
           path: src/assets/images
+          extensions: ["png", "webp"]
+          categories: image
           rename: true
           switcher: true
   - name: posts
