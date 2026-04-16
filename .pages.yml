@@ -31,7 +31,7 @@ content:
   - name: authors
     label: Authors
     type: file
-    path: data/authors.json
+    path: src/data/authors.json
     format: json
     list: true
     fields:
