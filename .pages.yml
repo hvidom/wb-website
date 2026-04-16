@@ -28,7 +28,7 @@ content:
         label: Body
         type: rich-text
         options:
-          media: content_images
+          media: images
           path: src/assets/images
           rename: true
           switcher: true
