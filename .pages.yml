@@ -18,6 +18,12 @@ content:
     view:
       fields: [ title, draft, date, sity ]
     fields:
+      - name: cover
+        label: Cover image
+        type: image
+        options:
+          media: images
+          path: src/assets/images
       - name: author 
         label: Author
         type: string
@@ -54,13 +60,14 @@ content:
         label: Body, 
         type: rich-text
         options:
-          media: content_images
-          path: src/assets/blog
+          media: images
+          path: src/assets/images
           rename: true
           switcher: true
           input: src/assets/images
           output: src/assets/images
           extensions: [png, jpg, webp]
+          
           
   - name: posts
     label: Posts
