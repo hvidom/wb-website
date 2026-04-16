@@ -9,4 +9,6 @@ featured: true
 draft: false
 tags:
   - cms
+description: So, this is a test post for our blog
 ---
+Long time ago, when only Wordpress was used by millions..
