@@ -61,13 +61,8 @@ content:
         type: rich-text
         options:
           media: images
-          path: src/assets/images
           rename: true
           switcher: true
-          input: src/assets/images
-          output: src/assets/images
-          extensions: [png, jpg, webp]
-          
           
   - name: posts
     label: Posts
