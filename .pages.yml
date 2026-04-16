@@ -1,7 +1,63 @@
 media:
-  input: public
-  output: /
+  - name: images
+    label: Images
+    input: src/assets/images
+    output: src/assets/images
+    rename: safe
+    extensions: [png, jpg, webp]
+  - name: docs
+    label: Documents
+    input: src/media/docs
+    output: src/media/docs
+    categories: [document]
 content:
+  - name: events
+    label: Events
+    type: collection
+    path: src/content/events
+    view:
+      fields: [ title, draft, date, sity ]
+    fields:
+      - name: author, 
+        label: Author, 
+        type: string,
+      - name: pubDatetime, 
+        label: Date, 
+        type: date,
+      - name: modDatetime, 
+        label: Date, 
+        type: date,
+      - name: title, 
+        label: Title, 
+        type: string, 
+        required: true 
+      - name: ogImage, 
+        label: Title, 
+        type: string,
+      - name: slug, 
+        label: Slug, 
+        type: string,
+      - name: featured, 
+        label: Featured, 
+        type: boolean,
+      - name: draft, 
+        label: Draft, 
+        type: boolean, 
+      - name: tags, 
+        label: Tags, 
+        type: string, 
+        list: true,
+      - name: description, 
+        label: Description, 
+        type: string,
+      - name: body, 
+        label: Body, 
+        type: rich-text,
+        options:
+          media: content_images
+          path: public/images/blog
+          rename: true
+          switcher: true
   - name: posts
     label: Posts
     type: collection
