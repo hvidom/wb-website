@@ -55,9 +55,13 @@ content:
         type: rich-text
         options:
           media: content_images
-          path: public/images/blog
+          path: src/assets/blog
           rename: true
           switcher: true
+          input: src/assets/images
+          output: src/assets/images
+          extensions: [png, jpg, webp]
+          
   - name: posts
     label: Posts
     type: collection
