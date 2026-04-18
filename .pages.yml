@@ -5,71 +5,98 @@ media:
     output: src/assets/images
     rename: safe
     extensions: [png, jpg, webp]
-  - name: docs
-    label: Documents
-    input: src/media/docs
-    output: src/media/docs
-    categories: [document]
+
 content:
-  - name: events
-    label: Events
+  # COMPONENT: SOCIAL MEDIA PROFILES (Centralized management)
+  - name: socials
+    label: Social Media
     type: collection
-    path: src/content/events
-    view:
-      fields: [ title, draft, date, sity ]
+    path: src/data/socials
+    format: json
     fields:
-      - name: cover
-        label: Cover image
-        type: image
+      - { name: platform, label: Platform, type: select, options: { values: [LinkedIn, Twitter, GitHub, Instagram, Facebook] } }
+      - { name: username, label: Username, type: string }
+      - { name: url, label: Profile URL, type: string, required: true }
+
+  # COLLECTION: AUTHORS (Updated with Socials Reference)
+  - name: authors
+    label: Authors
+    type: collection
+    path: src/content/authors
+    format: md
+    fields:
+      - { name: name, label: Full Name, type: string, required: true }
+      - { name: role, label: Role / Position, type: string }
+      - name: socialProfiles
+        label: Social Media Links
+        type: reference
+        list: true # Allows selecting multiple social profiles
         options:
-          media: images
-          path: src/assets/images
-      - name: body
-        label: Body
-        type: rich-text
-        options:
-          media: images
-          path: src/assets/images
-          extensions: ["png", "webp"]
-          categories: image
-          rename: true
-          switcher: true
+          collection: socials
+          field: platform
+      - { name: avatar, label: Avatar, type: image, options: { media: images } }
+      - { name: body, label: Biography, type: rich-text }
+
+  # COLLECTION: POSTS (Updated with FAQ Blocks)
   - name: posts
     label: Posts
     type: collection
     path: src/content/blog
-    view:
-      fields: [ title, draft, date ]
+    format: md
     fields:
-      - { name: author, label: Author, type: string }
-      - { name: pubDatetime, label: Date, type: date }
-      - { name: modDatetime, label: Date, type: date }
       - { name: title, label: Title, type: string, required: true }
-      - { name: ogImage, label: Title, type: string }
-      - { name: slug, label: Slug, type: string }
-      - { name: featured, label: Featured, type: boolean }
-      - { name: draft, label: Draft, type: boolean }
+      - { name: author, label: Author, type: reference, options: { collection: authors, field: name } }
+      - { name: pubDatetime, label: Publication Date, type: date }
+      - name: category
+        label: Category
+        type: select
+        options:
+          values: [News, Reviews, Case Studies, Useful Resources]
       - { name: tags, label: Tags, type: string, list: true }
-      - { name: description, label: Description, type: string }
-      - { name: body, label: Body, type: rich-text }
-  - name: about
-    label: About page
-    type: file
-    path: src/pages/about.md
+      
+      # FAQ SECTION USING BLOCKS
+      - name: faq
+        label: FAQ Section
+        type: block
+        fields:
+          - name: items
+            label: Questions & Answers
+            type: object
+            list: true
+            # Limiting to 5 for your specific requirement
+            max: 5
+            fields:
+              - { name: question, label: Question, type: string }
+              - { name: answer, label: Answer, type: text } # text type for longer answers
+      
+      - { name: description, label: Short Description, type: string }
+      - { name: body, label: Content, type: rich-text }
+
+  # COLLECTION: BRANCHES (As per Irish structure)
+  - name: branches
+    label: Branches
+    type: collection
+    path: src/content/branches
+    format: md
     fields:
-      - { name: layout, type: string, hidden: true, default: "../layouts/AboutLayout.astro" }
-      - { name: title, label: Title, type: string }
-      - { name: body, label: Body, type: rich-text, options: { input: public/assets, output: /assets } }
-  - name: authors
-    label: Authors
-    type: file
-    path: src/data/authors.json
-    format: json
-    list: true
+      - { name: title, label: Branch Name, type: string, required: true }
+      - name: city
+        label: City
+        type: select
+        options:
+          values: [Dublin, Cork, Galway, Limerick, Waterford]
+      - { name: address, label: Address, type: string }
+      - { name: phone, label: Phone Number, type: string }
+      - { name: body, label: Description, type: rich-text }
+
+  # COLLECTION: GRANTS
+  - name: grants
+    label: Grants
+    type: collection
+    path: src/content/grants
+    format: md
     fields:
-      - name: name
-        type: string
-      - name: email
-        type: string
-      - name: avatar
-        type: image
+      - { name: title, label: Grant Title, type: string, required: true }
+      - { name: amount, label: Grant Amount, type: string }
+      - { name: deadline, label: Application Deadline, type: date }
+      - { name: body, label: Detailed Description, type: rich-text }
