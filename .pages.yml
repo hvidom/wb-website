@@ -1,102 +1,149 @@
-media:
-  - name: images
-    label: Images
-    input: src/assets/images
-    output: src/assets/images
-    rename: safe
-    extensions: [png, jpg, webp]
+# Pages CMS Configuration
 
 content:
-  # COMPONENT: SOCIAL MEDIA PROFILES (Centralized management)
-  - name: socials
-    label: Social Media
+  # 1. Коллекция КОМАНДА (Новая)
+  - name: team
+    label: Команда
     type: collection
-    path: src/data/socials
-    format: json
-    fields:
-      - { name: platform, label: Platform, type: select, options: { values: [LinkedIn, Twitter, GitHub, Instagram, Facebook] } }
-      - { name: username, label: Username, type: string }
-      - { name: url, label: Profile URL, type: string, required: true }
-
-  # COLLECTION: AUTHORS (Updated with Socials Reference)
-  - name: authors
-    label: Authors
-    type: collection
-    path: src/content/authors
+    path: content/team
     format: md
     fields:
-      - { name: name, label: Full Name, type: string, required: true }
-      - { name: role, label: Role / Position, type: string }
-      - name: socialProfiles
-        label: Social Media Links
+      - name: name
+        label: ФИО
+        type: string
+      - name: role
+        label: Должность
+        type: string
+      - name: avatar
+        label: Аватарка
+        type: image
+      - name: bio
+        label: Описание / Биография
+        type: text
+      - name: email
+        label: Контактный Email
+        type: string
+      - name: phone
+        label: Телефон
+        type: string
+      # Привязка к компоненту Social Media (массив, если соцсетей несколько)
+      - name: social_links
+        label: Социальные сети
+        type: list
+        field:
+          $ref: "#/components/social_media"
+      - name: seo
+        $ref: "#/components/seo"
+
+  # 2. Обновленный Блог
+  - name: blog
+    label: Блог
+    type: collection
+    path: content/blog
+    format: md
+    fields:
+      - name: title
+        label: Заголовок поста
+        type: string
+      - name: date
+        label: Дата публикации
+        type: date
+      # ТЕПЕРЬ ЭТО СВЯЗЬ С КОМАНДОЙ
+      - name: author
+        label: Автор поста
         type: reference
-        list: true # Allows selecting multiple social profiles
-        options:
-          collection: socials
-          field: platform
-      - { name: avatar, label: Avatar, type: image, options: { media: images } }
-      - { name: body, label: Biography, type: rich-text }
+        collection: team
+        field: name
+      - name: image
+        label: Обложка
+        type: image
+      - name: body
+        label: Содержание
+        type: rich-text
+      - name: seo
+        $ref: "#/components/seo"
 
-  # COLLECTION: POSTS (Updated with FAQ Blocks)
-  - name: posts
-    label: Posts
+  # 3. Обновленные Мероприятия
+  - name: events
+    label: Мероприятия
     type: collection
-    path: src/content/blog
+    path: content/events
     format: md
     fields:
-      - { name: title, label: Title, type: string, required: true }
-      - { name: author, label: Author, type: reference, options: { collection: authors, field: name } }
-      - { name: pubDatetime, label: Publication Date, type: date }
-      - name: category
-        label: Category
-        type: select
-        options:
-          values: [News, Reviews, Case Studies, Useful Resources]
-      - { name: tags, label: Tags, type: string, list: true }
-      
-      # FAQ SECTION USING BLOCKS
-      - name: faq
-        label: FAQ Section
-        type: block
-        fields:
-          - name: items
-            label: Questions & Answers
-            type: object
-            list: true
-            # Limiting to 5 for your specific requirement
-            max: 5
-            fields:
-              - { name: question, label: Question, type: string }
-              - { name: answer, label: Answer, type: text } # text type for longer answers
-      
-      - { name: description, label: Short Description, type: string }
-      - { name: body, label: Content, type: rich-text }
+      - name: title
+        label: Название события
+        type: string
+      - name: event_date
+        label: Дата проведения
+        type: datetime
+      # КТО ВЕДЕТ ИВЕНТ (СВЯЗЬ С КОМАНДОЙ)
+      - name: speaker
+        label: Ведущий / Организатор
+        type: reference
+        collection: team
+        field: name
+      - name: location
+        label: Локация
+        type: string
+      - name: branch
+        label: Филиал
+        type: reference
+        collection: branches
+        field: title
+      - name: description
+        label: Описание события
+        type: rich-text
+      - name: seo
+        $ref: "#/components/seo"
 
-  # COLLECTION: BRANCHES (As per Irish structure)
+  # 4. Филиалы
   - name: branches
-    label: Branches
+    label: Филиалы
     type: collection
-    path: src/content/branches
+    path: content/branches
     format: md
     fields:
-      - { name: title, label: Branch Name, type: string, required: true }
-      - name: city
-        label: City
+      - name: title
+        label: Город / Название
+        type: string
+      # СВЯЗЬ: КТО УПРАВЛЯЕТ ФИЛИАЛОМ
+      - name: manager
+        label: Руководитель филиала
+        type: reference
+        collection: team
+        field: name
+      - name: status
+        label: Статус
         type: select
         options:
-          values: [Dublin, Cork, Galway, Limerick, Waterford]
-      - { name: address, label: Address, type: string }
-      - { name: phone, label: Phone Number, type: string }
-      - { name: body, label: Description, type: rich-text }
+          - label: Active
+            value: active
+          - label: Coming Soon
+            value: coming_soon
+      - name: seo
+        $ref: "#/components/seo"
 
-  # COLLECTION: GRANTS
-  - name: grants
-    label: Grants
-    type: collection
-    path: src/content/grants
-    format: md
+# Компоненты остаются прежними
+components:
+  seo:
+    type: object
+    label: SEO
     fields:
-      - { name: title, label: Grant Title, type: string, required: true }
-      - { name: amount, label: Grant Amount, type: string }
-      - { name: deadline, label: Application Deadline, type: date }
-      - { name: body, label: Detailed Description, type: rich-text }
+      - name: title
+        type: string
+      - name: description
+        type: text
+
+  social_media:
+    type: object
+    label: social
+    fields:
+      - name: title
+        label: Платформа
+        type: string
+      - name: link
+        label: Ссылка
+        type: string
+      - name: icon
+        label: Иконка
+        type: image
