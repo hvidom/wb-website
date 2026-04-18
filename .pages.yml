@@ -1,149 +1,146 @@
-# Pages CMS Configuration
+# Media configuration for Astro
+media:
+  - name: images
+    label: Images
+    input: src/assets/images
+    output: /src/assets/images
+    rename: safe
+    extensions: [png, jpg, webp, svg]
+  - name: docs
+    label: Documents
+    input: src/assets/docs
+    output: /src/assets/docs
+    categories: [document]
 
 content:
-  # 1. Коллекция КОМАНДА (Новая)
+  # --- КОЛЛЕКЦИЯ: КОМАНДА ---
   - name: team
-    label: Команда
+    label: Team
     type: collection
-    path: content/team
-    format: md
+    path: src/content/team
+    view:
+      fields: [name, role]
     fields:
       - name: name
-        label: ФИО
+        label: Full Name
         type: string
       - name: role
-        label: Должность
+        label: Role
         type: string
       - name: avatar
-        label: Аватарка
+        label: Avatar
         type: image
+        options:
+          media: images
       - name: bio
-        label: Описание / Биография
+        label: Biography
         type: text
-      - name: email
-        label: Контактный Email
-        type: string
-      - name: phone
-        label: Телефон
-        type: string
-      # Привязка к компоненту Social Media (массив, если соцсетей несколько)
       - name: social_links
-        label: Социальные сети
+        label: Social Media
         type: list
         field:
           $ref: "#/components/social_media"
       - name: seo
         $ref: "#/components/seo"
 
-  # 2. Обновленный Блог
-  - name: blog
-    label: Блог
+  # --- КОЛЛЕКЦИЯ: БЛОГ ---
+  - name: posts
+    label: Posts
     type: collection
-    path: content/blog
-    format: md
+    path: src/content/blog
+    view:
+      fields: [title, date, draft]
     fields:
       - name: title
-        label: Заголовок поста
+        label: Title
+        type: string
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: date
+        label: Publish Date
+        type: date
+      - name: author
+        label: Author
+        type: reference
+        collection: team
+        field: name
+      - name: cover
+        label: Cover Image
+        type: image
+        options:
+          media: images
+      - name: body
+        label: Body Content
+        type: rich-text
+        options:
+          media: images
+          switcher: true
+      - name: seo
+        $ref: "#/components/seo"
+
+  # --- КОЛЛЕКЦИЯ: ИВЕНТЫ ---
+  - name: events
+    label: Events
+    type: collection
+    path: src/content/events
+    view:
+      fields: [title, date, city]
+    fields:
+      - name: title
+        label: Event Title
         type: string
       - name: date
-        label: Дата публикации
-        type: date
-      # ТЕПЕРЬ ЭТО СВЯЗЬ С КОМАНДОЙ
-      - name: author
-        label: Автор поста
-        type: reference
-        collection: team
-        field: name
-      - name: image
-        label: Обложка
-        type: image
-      - name: body
-        label: Содержание
-        type: rich-text
-      - name: seo
-        $ref: "#/components/seo"
-
-  # 3. Обновленные Мероприятия
-  - name: events
-    label: Мероприятия
-    type: collection
-    path: content/events
-    format: md
-    fields:
-      - name: title
-        label: Название события
-        type: string
-      - name: event_date
-        label: Дата проведения
+        label: Event Date
         type: datetime
-      # КТО ВЕДЕТ ИВЕНТ (СВЯЗЬ С КОМАНДОЙ)
+      - name: city
+        label: City
+        type: string
       - name: speaker
-        label: Ведущий / Организатор
+        label: Speaker / Host
         type: reference
         collection: team
         field: name
-      - name: location
-        label: Локация
-        type: string
-      - name: branch
-        label: Филиал
-        type: reference
-        collection: branches
-        field: title
-      - name: description
-        label: Описание события
-        type: rich-text
-      - name: seo
-        $ref: "#/components/seo"
-
-  # 4. Филиалы
-  - name: branches
-    label: Филиалы
-    type: collection
-    path: content/branches
-    format: md
-    fields:
-      - name: title
-        label: Город / Название
-        type: string
-      # СВЯЗЬ: КТО УПРАВЛЯЕТ ФИЛИАЛОМ
-      - name: manager
-        label: Руководитель филиала
-        type: reference
-        collection: team
-        field: name
-      - name: status
-        label: Статус
-        type: select
+      - name: cover
+        label: Event Cover
+        type: image
         options:
-          - label: Active
-            value: active
-          - label: Coming Soon
-            value: coming_soon
+          media: images
+      - name: body
+        label: Description
+        type: rich-text
+        options:
+          media: images
+          switcher: true
       - name: seo
         $ref: "#/components/seo"
 
-# Компоненты остаются прежними
+# --- ПЕРЕИСПУЛЬЗУЕМЫЕ КОМПОНЕНТЫ ---
 components:
   seo:
     type: object
-    label: SEO
+    label: SEO Meta
     fields:
       - name: title
+        label: Meta Title
         type: string
       - name: description
+        label: Meta Description
         type: text
 
   social_media:
     type: object
-    label: social
+    label: Social Link
     fields:
       - name: title
-        label: Платформа
+        label: Platform (e.g. Instagram)
         type: string
       - name: link
-        label: Ссылка
+        label: URL
         type: string
       - name: icon
-        label: Иконка
+        label: Icon Image
         type: image
+        options:
+          media: images
